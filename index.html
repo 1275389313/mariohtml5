@@ -20,16 +20,106 @@
 				justify-content: center;
 			}
 			#canvas {
-				/* keep 4:3, fill the browser window as much as possible */
 				width: min(100vw, calc(100vh * 4 / 3));
 				height: min(100vh, calc(100vw * 3 / 4));
 				image-rendering: pixelated;
 				image-rendering: crisp-edges;
 				outline: none;
+				flex-shrink: 0;
+			}
+			/* Sit in the left letterbox (black bars when window is wider than 4:3) */
+			#controls {
+				position: fixed;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: max(0px, calc((100vw - min(100vw, 100vh * 4 / 3)) / 2));
+				box-sizing: border-box;
+				padding: 24px 16px;
+				color: #c8c8c8;
+				font: 14px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+				overflow: auto;
+				pointer-events: none;
+			}
+			#controls .inner {
+				max-width: 220px;
+				margin: 0 auto;
+			}
+			#controls h1 {
+				margin: 0 0 12px;
+				font-size: 16px;
+				font-weight: 600;
+				color: #fff;
+				letter-spacing: 0.02em;
+			}
+			#controls ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			#controls li {
+				margin: 0 0 8px;
+			}
+			#controls kbd {
+				display: inline-block;
+				min-width: 1.6em;
+				padding: 1px 6px;
+				margin-right: 2px;
+				border: 1px solid #555;
+				border-bottom-width: 2px;
+				border-radius: 4px;
+				background: #1a1a1a;
+				color: #fff;
+				font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+				text-align: center;
+			}
+			#controls .hint {
+				margin-top: 16px;
+				font-size: 12px;
+				color: #777;
+			}
+			/* No left letterbox (tall/narrow screens): put guide under a thin top bar */
+			@media (max-aspect-ratio: 4/3) {
+				#controls {
+					width: 100%;
+					height: auto;
+					bottom: auto;
+					padding: 8px 12px;
+					background: rgba(0,0,0,0.75);
+					z-index: 2;
+				}
+				#controls .inner {
+					max-width: none;
+					display: flex;
+					flex-wrap: wrap;
+					gap: 8px 16px;
+					align-items: center;
+				}
+				#controls h1 { margin: 0 12px 0 0; }
+				#controls ul {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 4px 14px;
+				}
+				#controls li { margin: 0; }
+				#controls .hint { display: none; }
 			}
 		</style>
 	</head>
 	<body>
+		<aside id="controls" aria-label="操作说明">
+			<div class="inner">
+				<h1>操作说明</h1>
+				<ul>
+					<li><kbd>←</kbd><kbd>→</kbd> 左右移动</li>
+					<li><kbd>↑</kbd><kbd>↓</kbd> 地图移动 / 下蹲</li>
+					<li><kbd>S</kbd> 跳跃 / 开始 / 进关</li>
+					<li><kbd>A</kbd> 奔跑 / 发射火球</li>
+				</ul>
+				<p class="hint">先点一下游戏画面，再按键盘。</p>
+			</div>
+		</aside>
+
 		<canvas id="canvas" width="640" height="480" tabindex="0">
 			<p>Your browser does not support the canvas element.</p>
 		</canvas>
